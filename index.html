@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación RSVP</title>
+    <!-- Fuentes elegantes: Cursiva para el título y Serif/Sans para textos -->
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background: transparent; /* Permite ver el fondo de tu Canva */
+            margin: 0; 
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Contenedor idéntico al de tu mockup */
+        .widget-rsvp { 
+            width: 100%; 
+            max-width: 440px; 
+            background: rgba(244, 240, 233, 0.75); /* Marfil sutilmente traslúcido */
+            border: 1px solid #3e513c; /* El verde de tu paleta */
+            border-radius: 18px; 
+            padding: 25px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(62, 81, 60, 0.08);
+        }
+        
+        /* Título en tipografía cursiva fluida */
+        h2 { 
+            font-family: 'Alex Brush', cursive; 
+            font-size: 38px;
+            color: #3e513c; 
+            margin: 0 0 20px 0;
+            font-weight: 400;
+        }
+        
+        .form-group { 
+            margin-bottom: 16px; 
+            text-align: left; 
+        }
+        
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+            font-weight: 500; 
+            color: #3e513c; 
+        }
+        
+        /* Campos de texto estilizados y limpios */
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px 12px; 
+            border: 1px solid rgba(62, 81, 60, 0.4); 
+            border-radius: 6px; 
+            box-sizing: border-box; 
+            font-family: 'Montserrat', sans-serif;
+            background: rgba(255, 255, 255, 0.9); 
+            color: #2c362b;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: #3e513c;
+            box-shadow: 0 0 5px rgba(62, 81, 60, 0.2);
+        }
+        
+        /* Botón con especificaciones de color y tipografía New Icon */
+        .btn-enviar { 
+            background-color: #3e513c; /* Tu verde solicitado */
+            color: #ffffff; 
+            border: none; 
+            padding: 12px 30px; 
+            width: 80%; /* Centrado y estético como en el diseño */
+            max-width: 250px;
+            border-radius: 6px; 
+            font-family: 'New Icon', 'Montserrat', sans-serif; /* Tu tipografía principal */
+            font-size: 15px; 
+            font-weight: 600; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 10px;
+            transition: background 0.3s, transform 0.1s;
+        }
+        
+        .btn-enviar:hover { 
+            background-color: #2d3d2b; 
+        }
+        
+        .btn-enviar:active {
+            transform: scale(0.98);
+        }
+        
+        /* Mensaje de confirmación armonioso */
+        #mensajeExito { 
+            display: none; 
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 20px; 
+            color: #3e513c; 
+            padding: 40px 10px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="widget-rsvp">
+    <form id="rsvpForm">
+        <h2>Confirmar Asistencia</h2>
+        
+        <div class="form-group">
+            <label for="nombre">Nombre(s)</label>
+            <input type="text" id="nombre" required placeholder="Ej. Sr. y Sra. Pérez">
+        </div>
+        
+        <div class="form-group">
+            <label for="asiste">¿Asistirán?</label>
+            <select id="asiste" required>
+                <option value="" disabled selected hidden>Select</option>
+                <option value="Sí">Sí, ¡allí estaremos!</option>
+                <option value="No">Lamentablemente no podremos</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="acompanantes">Pases Adicionales</label>
+            <select id="acompanantes">
+                <option value="0">0 (Solo yo)</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="notas">Notas (Alergias/Menú)</label>
+            <textarea id="notas" rows="2" placeholder="Ej. Menú vegano / Alergia al gluten"></textarea>
+        </div>
+
+        <button type="submit" class="btn-enviar" id="btnEnviar">ENVIAR</button>
+    </form>
+    
+    <div id="mensajeExito">✨ ¡Gracias! Tu respuesta ha sido guardada. Nos vemos pronto. ✨</div>
+</div>
+
+<script>
+    // Coloca aquí la misma URL de Google Apps Script que generaste en el primer paso
+    const WEB_APP_URL = "TU_URL_DE_GOOGLE_APPS_SCRIPT";
+
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "ENVIANDO...";
+        btn.disabled = true;
+
+        const datos = {
+            nombre: document.getElementById('nombre').value,
+            asiste: document.getElementById('asiste').value,
+            acompanantes: document.getElementById('acompanantes').value,
+            notas: document.getElementById('notas').value
+        };
+
+        try {
+            await fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+            
+            // Oculta el formulario de forma limpia y muestra el éxito
+            document.getElementById('rsvpForm').style.display = 'none';
+            document.getElementById('mensajeExito').style.display = 'block';
+        } catch (error) {
+            alert('Tuvimos un pequeño problema al enviar. Por favor, inténtalo otra vez.');
+            btn.innerText = "ENVIAR";
+            btn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
