@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmación RSVP</title>
-    <!-- Fuentes elegantes: Cursiva para el título y Serif/Sans para textos -->
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
     
     <style>
@@ -133,7 +132,7 @@
 
         <div class="form-group">
             <label for="notas">Detalles</label>
-            <textarea id="Detalle" rows="2" placeholder="Comentario adicional importante sobre tu asistencia"></textarea>
+            <textarea id="notas" rows="2" placeholder="Comentario adicional importante sobre tu asistencia"></textarea>
         </div>
 
         <button type="submit" class="btn-enviar" id="btnEnviar">ENVIAR</button>
@@ -143,7 +142,7 @@
 </div>
 
 <script>
-    // Coloca aquí la misma URL de Google Apps Script que generaste en el primer paso
+    // URL de tu Google Apps Script
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzMcNFFLpYzrRxMM6jq7kk7TsmvD-8d1zbia88H3FfHqWvWs6rrtCUdoN_PLLIVojavuA/exec";
 
     document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
@@ -152,17 +151,17 @@
         btn.innerText = "ENVIANDO...";
         btn.disabled = true;
 
+        // Se estructuran los datos eliminando la referencia al ID inexistente 'acompanantes'
         const datos = {
             nombre: document.getElementById('nombre').value,
             asiste: document.getElementById('asiste').value,
-            acompanantes: document.getElementById('acompanantes').value,
             notas: document.getElementById('notas').value
         };
 
         try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
-                mode: 'no-cors',
+                mode: 'no-cors', // Ideal para evitar problemas de CORS con Google Apps Script
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datos)
             });
